@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -28,7 +28,7 @@ const JobDetail = () => {
     const fetchJob = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/v1/jobs/detail/${id}`
+          `http://itss-2-backend-zvxe.vercel.app/api/v1/jobs/detail/${id}`
         );
         console.log("Dữ liệu trả về:", response.data);
         setJob(response.data);

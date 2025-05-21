@@ -77,7 +77,7 @@ const Home = () => {
   const fetchNewestJobs = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:8080/api/v1/jobs?sortKey=startDate&sortValue=desc&limit=10&page=1"
+        "http://itss-2-backend-zvxe.vercel.app/api/v1/jobs?sortKey=startDate&sortValue=desc&limit=10&page=1"
       );
       setNewestJobs(res.data.data);
     } catch (err) {
@@ -92,7 +92,7 @@ const Home = () => {
   const fetchUser = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:8080/api/v1/users/682b71380c69774bd1f056bd"
+        "http://itss-2-backend-zvxe.vercel.app/api/v1/users/682b71380c69774bd1f056bd"
       );
       setUser(res.data);
     } catch (err) {
@@ -121,7 +121,9 @@ const Home = () => {
 
     const query = params.toString();
     try {
-      const res = await axios.get(`http://localhost:8080/api/v1/jobs?${query}`);
+      const res = await axios.get(
+        `http://itss-2-backend-zvxe.vercel.app/api/v1/jobs?${query}`
+      );
       setForYouJobs(res.data.data);
     } catch (err) {
       const errorMessage =

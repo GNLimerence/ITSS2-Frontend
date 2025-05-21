@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from "react";
 import "./Profile.css";
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer/Footer";
 import viettel from "../../assets/viettel.png";
-import { Button, TextField, CircularProgress, Snackbar, Alert } from "@mui/material";
+import {
+  Button,
+  TextField,
+  CircularProgress,
+  Snackbar,
+  Alert,
+} from "@mui/material";
 import axios from "axios";
 
 const Profile = () => {
@@ -20,7 +26,7 @@ const Profile = () => {
     jobType: "",
     jobForm: "",
     category: "",
-    workingSchedule: []
+    workingSchedule: [],
   };
 
   // State cho profile
@@ -30,30 +36,34 @@ const Profile = () => {
   const [notification, setNotification] = useState({
     open: false,
     message: "",
-    severity: "success"
+    severity: "success",
   });
 
   // State cho các tùy chọn dropdown
   const [categoryOptions, setCategoryOptions] = useState([]);
 
-  
   // State cho dropdown
   const [dropdowns, setDropdowns] = useState({
     major: false,
     university: false,
     jobType: false,
     jobForm: false,
-    category: false
+    category: false,
   });
 
   // Danh sách lựa chọn cố định cho các dropdown
   const options = {
     major: ["Công nghệ thông tin", "Kinh tế", "Ngoại ngữ", "Sư phạm", "Y khoa"],
-    university: ["Đại học Bách Khoa", "Đại học Kinh tế", "Đại học Ngoại thương", "Đại học Quốc gia"],
+    university: [
+      "Đại học Bách Khoa",
+      "Đại học Kinh tế",
+      "Đại học Ngoại thương",
+      "Đại học Quốc gia",
+    ],
     jobType: ["Part-time", "Full-time", "Freelancer"],
-    jobForm: ["Internship", "Contract", "Làm thêm"]
+    jobForm: ["Internship", "Contract", "Làm thêm"],
   };
-  
+
   // ID người dùng cố định - trong thực tế sẽ lấy từ authentication
   const userId = "682b71380c69774bd1f056bd";
 
@@ -63,8 +73,10 @@ const Profile = () => {
       setLoading(true);
       try {
         // Lấy thông tin người dùng
-        const userResponse = await axios.get(`http://localhost:8080/api/v1/users/${userId}`);
-        
+        const userResponse = await axios.get(
+          `http://itss-2-backend-zvxe.vercel.app/api/v1/users/${userId}`
+        );
+
         if (userResponse.data) {
           // Chuyển đổi dữ liệu schedule từ API sang định dạng availability
           const availability = {
@@ -74,12 +86,19 @@ const Profile = () => {
             "Thứ 5": { "Ca sáng": false, "Ca chiều": false, "Ca tối": false },
             "Thứ 6": { "Ca sáng": false, "Ca chiều": false, "Ca tối": false },
             "Thứ 7": { "Ca sáng": false, "Ca chiều": false, "Ca tối": false },
-            "Chủ nhật": { "Ca sáng": false, "Ca chiều": false, "Ca tối": false },
+            "Chủ nhật": {
+              "Ca sáng": false,
+              "Ca chiều": false,
+              "Ca tối": false,
+            },
           };
-          
+
           // Nếu có lịch làm việc, cập nhật vào availability
-          if (userResponse.data.workingSchedule && userResponse.data.workingSchedule.length > 0) {
-            userResponse.data.workingSchedule.forEach(schedule => {
+          if (
+            userResponse.data.workingSchedule &&
+            userResponse.data.workingSchedule.length > 0
+          ) {
+            userResponse.data.workingSchedule.forEach((schedule) => {
               // Chuyển đổi "sáng", "chiều", "tối" thành "Ca sáng", "Ca chiều", "Ca tối"
               const periodKey = `Ca ${schedule.period}`;
               if (availability[schedule.day]) {
@@ -87,17 +106,19 @@ const Profile = () => {
               }
             });
           }
-          
+
           // Gán dữ liệu vào state
           setProfile({
             ...defaultProfile,
             ...userResponse.data,
-            availability: availability
+            availability: availability,
           });
         }
-        
+
         // Lấy danh sách danh mục công việc
-        const categoryResponse = await axios.get(`http://localhost:8080/api/v1/users/${userId}/get-category-list`);
+        const categoryResponse = await axios.get(
+          `http://itss-2-backend-zvxe.vercel.app/api/v1/users/${userId}/get-category-list`
+        );
         if (categoryResponse.data) {
           setCategoryOptions(categoryResponse.data);
         }
@@ -106,13 +127,13 @@ const Profile = () => {
         setNotification({
           open: true,
           message: "Không thể tải thông tin người dùng. Vui lòng thử lại sau.",
-          severity: "error"
+          severity: "error",
         });
       } finally {
         setLoading(false);
       }
     };
-    
+
     fetchUserData();
   }, [userId]);
 
@@ -120,7 +141,7 @@ const Profile = () => {
   const handleInputChange = (field, value) => {
     setProfile({
       ...profile,
-      [field]: value
+      [field]: value,
     });
   };
 
@@ -128,13 +149,13 @@ const Profile = () => {
   const handleSelectOption = (field, value) => {
     setProfile({
       ...profile,
-      [field]: value
+      [field]: value,
     });
-    
+
     // Đóng dropdown sau khi chọn
     setDropdowns({
       ...dropdowns,
-      [field]: false
+      [field]: false,
     });
   };
 
@@ -142,7 +163,7 @@ const Profile = () => {
   const toggleDropdown = (dropdown) => {
     setDropdowns({
       ...dropdowns,
-      [dropdown]: !dropdowns[dropdown]
+      [dropdown]: !dropdowns[dropdown],
     });
   };
 
@@ -150,21 +171,21 @@ const Profile = () => {
   const handleAvailabilityChange = (day, period) => {
     const updatedAvailability = { ...profile.availability };
     updatedAvailability[day][period] = !updatedAvailability[day][period];
-    
+
     setProfile({
       ...profile,
-      availability: updatedAvailability
+      availability: updatedAvailability,
     });
   };
 
   // Xử lý cập nhật profile
   const handleUpdateProfile = async () => {
     setSaving(true);
-    
+
     try {
       // Chuyển đổi availability thành workingSchedule
       const workingSchedule = [];
-      
+
       Object.entries(profile.availability || {}).forEach(([day, periods]) => {
         Object.entries(periods).forEach(([period, isAvailable]) => {
           if (isAvailable) {
@@ -172,12 +193,12 @@ const Profile = () => {
             const periodValue = period.replace("Ca ", "");
             workingSchedule.push({
               day: day,
-              period: periodValue
+              period: periodValue,
             });
           }
         });
       });
-      
+
       // Chuẩn bị dữ liệu gửi lên server
       const userData = {
         name: profile.name,
@@ -189,17 +210,20 @@ const Profile = () => {
         university: profile.university,
         major: profile.major,
         category: profile.category,
-        workingSchedule: workingSchedule
+        workingSchedule: workingSchedule,
       };
-      
+
       // Gửi dữ liệu lên server
-      const response = await axios.post(`http://localhost:8080/api/v1/users/${userId}`, userData);
-      
+      const response = await axios.post(
+        `http://itss-2-backend-zvxe.vercel.app/api/v1/users/${userId}`,
+        userData
+      );
+
       if (response.status === 200) {
         setNotification({
           open: true,
           message: "Cập nhật thông tin thành công!",
-          severity: "success"
+          severity: "success",
         });
       }
     } catch (error) {
@@ -207,7 +231,7 @@ const Profile = () => {
       setNotification({
         open: true,
         message: "Không thể cập nhật thông tin. Vui lòng thử lại sau.",
-        severity: "error"
+        severity: "error",
       });
     } finally {
       setSaving(false);
@@ -218,7 +242,7 @@ const Profile = () => {
   const handleCloseNotification = () => {
     setNotification({
       ...notification,
-      open: false
+      open: false,
     });
   };
 
@@ -226,8 +250,16 @@ const Profile = () => {
     return (
       <div className="profile-page">
         <Header />
-        <div className="profile-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '70vh' }}>
-          <CircularProgress style={{ color: '#6300b3' }} />
+        <div
+          className="profile-container"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "70vh",
+          }}
+        >
+          <CircularProgress style={{ color: "#6300b3" }} />
         </div>
         <Footer />
       </div>
@@ -237,34 +269,38 @@ const Profile = () => {
   return (
     <div className="profile-page">
       <Header />
-      
+
       <div className="profile-gradient-banner"></div>
-      
+
       <div className="profile-container">
         <div className="profile-card">
           <div className="profile-header">
             <div className="profile-avatar-section">
-              <img 
-                src={profile.avatar} 
-                alt="Avatar" 
-                className="profile-avatar" 
+              <img
+                src={profile.avatar}
+                alt="Avatar"
+                className="profile-avatar"
               />
               <div className="profile-info">
                 <h2 className="profile-name">{profile.name}</h2>
                 <p className="profile-email">{profile.email}</p>
               </div>
             </div>
-            
-            <Button 
+
+            <Button
               variant="contained"
               className="update-btn"
               onClick={handleUpdateProfile}
               disabled={saving}
             >
-              {saving ? <CircularProgress size={24} style={{ color: 'white' }} /> : "Cập nhật"}
+              {saving ? (
+                <CircularProgress size={24} style={{ color: "white" }} />
+              ) : (
+                "Cập nhật"
+              )}
             </Button>
           </div>
-          
+
           <div className="profile-form">
             <div className="form-row">
               <div className="form-group">
@@ -277,7 +313,7 @@ const Profile = () => {
                   className="profile-input"
                 />
               </div>
-              
+
               <div className="form-group">
                 <label>Email</label>
                 <TextField
@@ -290,7 +326,7 @@ const Profile = () => {
                 />
               </div>
             </div>
-            
+
             <div className="form-row">
               <div className="form-group">
                 <label>Địa chỉ</label>
@@ -303,7 +339,7 @@ const Profile = () => {
                   placeholder="Nhập địa chỉ của bạn"
                 />
               </div>
-              
+
               <div className="form-group">
                 <label>Số điện thoại</label>
                 <TextField
@@ -316,24 +352,28 @@ const Profile = () => {
                 />
               </div>
             </div>
-            
+
             <div className="form-row">
               <div className="form-group">
                 <label>Khoa/Ngành học</label>
                 <div className="custom-dropdown">
-                  <div 
+                  <div
                     className="dropdown-selection"
                     onClick={() => toggleDropdown("major")}
                   >
                     {profile.major || "Chọn khoa/ngành học"}
-                    <KeyboardArrowDownIcon className={`dropdown-icon ${dropdowns.major ? "rotated" : ""}`} />
+                    <KeyboardArrowDownIcon
+                      className={`dropdown-icon ${
+                        dropdowns.major ? "rotated" : ""
+                      }`}
+                    />
                   </div>
-                  
+
                   {dropdowns.major && (
                     <div className="dropdown-options">
                       {options.major.map((option, index) => (
-                        <div 
-                          key={index} 
+                        <div
+                          key={index}
                           className="dropdown-option"
                           onClick={() => handleSelectOption("major", option)}
                         >
@@ -344,25 +384,31 @@ const Profile = () => {
                   )}
                 </div>
               </div>
-              
+
               <div className="form-group">
                 <label>Trường học</label>
                 <div className="custom-dropdown">
-                  <div 
+                  <div
                     className="dropdown-selection"
                     onClick={() => toggleDropdown("university")}
                   >
                     {profile.university || "Chọn trường học"}
-                    <KeyboardArrowDownIcon className={`dropdown-icon ${dropdowns.university ? "rotated" : ""}`} />
+                    <KeyboardArrowDownIcon
+                      className={`dropdown-icon ${
+                        dropdowns.university ? "rotated" : ""
+                      }`}
+                    />
                   </div>
-                  
+
                   {dropdowns.university && (
                     <div className="dropdown-options">
                       {options.university.map((option, index) => (
-                        <div 
-                          key={index} 
+                        <div
+                          key={index}
                           className="dropdown-option"
-                          onClick={() => handleSelectOption("university", option)}
+                          onClick={() =>
+                            handleSelectOption("university", option)
+                          }
                         >
                           {option}
                         </div>
@@ -372,24 +418,28 @@ const Profile = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className="form-row">
               <div className="form-group">
                 <label>Loại công việc mong muốn</label>
                 <div className="custom-dropdown">
-                  <div 
+                  <div
                     className="dropdown-selection"
                     onClick={() => toggleDropdown("jobType")}
                   >
                     {profile.jobType || "Chọn loại công việc"}
-                    <KeyboardArrowDownIcon className={`dropdown-icon ${dropdowns.jobType ? "rotated" : ""}`} />
+                    <KeyboardArrowDownIcon
+                      className={`dropdown-icon ${
+                        dropdowns.jobType ? "rotated" : ""
+                      }`}
+                    />
                   </div>
-                  
+
                   {dropdowns.jobType && (
                     <div className="dropdown-options">
                       {options.jobType.map((option, index) => (
-                        <div 
-                          key={index} 
+                        <div
+                          key={index}
                           className="dropdown-option"
                           onClick={() => handleSelectOption("jobType", option)}
                         >
@@ -400,23 +450,27 @@ const Profile = () => {
                   )}
                 </div>
               </div>
-              
+
               <div className="form-group">
                 <label>Hình thức công việc mong muốn</label>
                 <div className="custom-dropdown">
-                  <div 
+                  <div
                     className="dropdown-selection"
                     onClick={() => toggleDropdown("jobForm")}
                   >
                     {profile.jobForm || "Chọn hình thức công việc"}
-                    <KeyboardArrowDownIcon className={`dropdown-icon ${dropdowns.jobForm ? "rotated" : ""}`} />
+                    <KeyboardArrowDownIcon
+                      className={`dropdown-icon ${
+                        dropdowns.jobForm ? "rotated" : ""
+                      }`}
+                    />
                   </div>
-                  
+
                   {dropdowns.jobForm && (
                     <div className="dropdown-options">
                       {options.jobForm.map((option, index) => (
-                        <div 
-                          key={index} 
+                        <div
+                          key={index}
                           className="dropdown-option"
                           onClick={() => handleSelectOption("jobForm", option)}
                         >
@@ -428,24 +482,28 @@ const Profile = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className="form-row">
               <div className="form-group">
                 <label>Vị trí công việc mong muốn</label>
                 <div className="custom-dropdown">
-                  <div 
+                  <div
                     className="dropdown-selection"
                     onClick={() => toggleDropdown("category")}
                   >
                     {profile.category || "Chọn vị trí công việc"}
-                    <KeyboardArrowDownIcon className={`dropdown-icon ${dropdowns.category ? "rotated" : ""}`} />
+                    <KeyboardArrowDownIcon
+                      className={`dropdown-icon ${
+                        dropdowns.category ? "rotated" : ""
+                      }`}
+                    />
                   </div>
-                  
+
                   {dropdowns.category && (
                     <div className="dropdown-options">
                       {categoryOptions.map((option, index) => (
-                        <div 
-                          key={index} 
+                        <div
+                          key={index}
                           className="dropdown-option"
                           onClick={() => handleSelectOption("category", option)}
                         >
@@ -457,12 +515,12 @@ const Profile = () => {
                 </div>
               </div>
             </div>
-            
+
             {/* Hiển thị bảng thời gian có sẵn nếu là Part-time */}
             {profile.jobType === "Part-time" && (
               <div className="schedule-section">
                 <h3 className="schedule-title">Thời gian làm việc</h3>
-                
+
                 <div className="schedule-table">
                   <div className="schedule-header">
                     <div className="schedule-day"></div>
@@ -470,44 +528,50 @@ const Profile = () => {
                     <div className="schedule-period">Ca chiều</div>
                     <div className="schedule-period">Ca tối</div>
                   </div>
-                  
-                  {Object.entries(profile.availability || {}).map(([day, periods]) => (
-                    <div className="schedule-row" key={day}>
-                      <div className="schedule-day">{day}</div>
-                      {Object.entries(periods).map(([period, isAvailable]) => (
-                        <div className="schedule-period-cell" key={period}>
-                          <input 
-                            type="checkbox"
-                            checked={isAvailable}
-                            onChange={() => handleAvailabilityChange(day, period)}
-                            className="schedule-checkbox"
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  ))}
+
+                  {Object.entries(profile.availability || {}).map(
+                    ([day, periods]) => (
+                      <div className="schedule-row" key={day}>
+                        <div className="schedule-day">{day}</div>
+                        {Object.entries(periods).map(
+                          ([period, isAvailable]) => (
+                            <div className="schedule-period-cell" key={period}>
+                              <input
+                                type="checkbox"
+                                checked={isAvailable}
+                                onChange={() =>
+                                  handleAvailabilityChange(day, period)
+                                }
+                                className="schedule-checkbox"
+                              />
+                            </div>
+                          )
+                        )}
+                      </div>
+                    )
+                  )}
                 </div>
               </div>
             )}
           </div>
         </div>
       </div>
-      
-      <Snackbar 
-        open={notification.open} 
-        autoHideDuration={6000} 
+
+      <Snackbar
+        open={notification.open}
+        autoHideDuration={6000}
         onClose={handleCloseNotification}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
-        <Alert 
-          onClose={handleCloseNotification} 
+        <Alert
+          onClose={handleCloseNotification}
           severity={notification.severity}
-          sx={{ width: '100%' }}
+          sx={{ width: "100%" }}
         >
           {notification.message}
         </Alert>
       </Snackbar>
-      
+
       <Footer />
     </div>
   );
