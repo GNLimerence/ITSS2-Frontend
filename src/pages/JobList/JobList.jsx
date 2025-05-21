@@ -76,7 +76,7 @@ const JobList = () => {
     const fetchAddresses = async () => {
       try {
         const response = await axios.get(
-          "http://itss-2-backend-zvxe.vercel.app/api/v1/address"
+          "https://itss-2-backend-zvxe.vercel.app/api/v1/address"
         );
         if (response.data && response.data.address) {
           setAddressOptions(response.data.address);
@@ -153,7 +153,7 @@ const JobList = () => {
 
         // Gọi API với các tham số
         const response = await axios.get(
-          `http://itss-2-backend-zvxe.vercel.app/api/v1/jobs?${params.toString()}`
+          `https://itss-2-backend-zvxe.vercel.app/api/v1/jobs?${params.toString()}`
         );
 
         if (response.data) {

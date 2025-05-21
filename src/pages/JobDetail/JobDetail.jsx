@@ -28,7 +28,7 @@ const JobDetail = () => {
     const fetchJob = async () => {
       try {
         const response = await axios.get(
-          `http://itss-2-backend-zvxe.vercel.app/api/v1/jobs/detail/${id}`
+          `https://itss-2-backend-zvxe.vercel.app/api/v1/jobs/detail/${id}`
         );
         console.log("Dữ liệu trả về:", response.data);
         setJob(response.data);

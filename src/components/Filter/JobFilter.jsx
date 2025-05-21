@@ -50,7 +50,7 @@ const JobFilter = ({ onFilterChange, initialFilters = {} }) => {
 
         // Sử dụng API mới để lấy danh sách category
         const response = await axios.get(
-          "http://itss-2-backend-zvxe.vercel.app/api/v1/users/682b71380c69774bd1f056bd/get-category-list"
+          "https://itss-2-backend-zvxe.vercel.app/api/v1/users/682b71380c69774bd1f056bd/get-category-list"
         );
         if (response.data) {
           // Thêm "Tất cả" vào danh sách category

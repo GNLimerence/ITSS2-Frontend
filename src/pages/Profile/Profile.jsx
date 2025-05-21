@@ -74,7 +74,7 @@ const Profile = () => {
       try {
         // Lấy thông tin người dùng
         const userResponse = await axios.get(
-          `http://itss-2-backend-zvxe.vercel.app/api/v1/users/${userId}`
+          `https://itss-2-backend-zvxe.vercel.app/api/v1/users/${userId}`
         );
 
         if (userResponse.data) {
@@ -117,7 +117,7 @@ const Profile = () => {
 
         // Lấy danh sách danh mục công việc
         const categoryResponse = await axios.get(
-          `http://itss-2-backend-zvxe.vercel.app/api/v1/users/${userId}/get-category-list`
+          `https://itss-2-backend-zvxe.vercel.app/api/v1/users/${userId}/get-category-list`
         );
         if (categoryResponse.data) {
           setCategoryOptions(categoryResponse.data);
@@ -215,7 +215,7 @@ const Profile = () => {
 
       // Gửi dữ liệu lên server
       const response = await axios.post(
-        `http://itss-2-backend-zvxe.vercel.app/api/v1/users/${userId}`,
+        `https://itss-2-backend-zvxe.vercel.app/api/v1/users/${userId}`,
         userData
       );
 

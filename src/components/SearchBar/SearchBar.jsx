@@ -43,7 +43,7 @@ const SearchBar = ({ gray = false }) => {
   const fetchAddresses = async () => {
     try {
       const res = await axios.get(
-        "http://itss-2-backend-zvxe.vercel.app/api/v1/address"
+        "https://itss-2-backend-zvxe.vercel.app/api/v1/address"
       );
       console.log(res);
       setAddresses(res.data.address);
