@@ -17,6 +17,7 @@ import AssignmentIcon from "@mui/icons-material/Assignment";
 import Schedule from "@mui/icons-material/WorkOutline";
 import "./JobDetail.css";
 import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 
 const JobDetail = () => {
   const { id } = useParams();
@@ -194,6 +195,7 @@ const JobDetail = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };
