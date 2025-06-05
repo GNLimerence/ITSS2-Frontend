@@ -18,6 +18,8 @@ import Schedule from "@mui/icons-material/WorkOutline";
 import "./JobDetail.css";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import EmailIcon from '@mui/icons-material/Email';
+import PhoneIcon from '@mui/icons-material/Phone';
 
 const JobDetail = () => {
   const { id } = useParams();
@@ -56,6 +58,27 @@ const JobDetail = () => {
       year: "numeric",
     });
   };
+
+  const toGmail = (str) => {
+    let noTones = str
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/đ/g, "d")
+      .replace(/Đ/g, "D")
+      .replace(/[^a-zA-Z0-9]/g, "") 
+      .toLowerCase();
+    return noTones + "@gmail.com";
+  }
+
+  const randomVietnamesePhone = () => {
+    const prefixes = ["09", "03", "07", "08", "05"];
+    const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+    let number = "";
+    for (let i = 0; i < 8; i++) {
+      number += Math.floor(Math.random() * 10);
+    }
+    return prefix + number;
+  }
 
   return (
     <div className="JobDetail-page">
@@ -172,6 +195,12 @@ const JobDetail = () => {
                 </li>
                 <li>
                   <LocationOnIcon /> {job.company.location}
+                </li>
+                <li>
+                  <EmailIcon /> {toGmail(job.company.name)}
+                </li>
+                <li>
+                  <PhoneIcon /> {randomVietnamesePhone()}
                 </li>
               </div>
             </div>
